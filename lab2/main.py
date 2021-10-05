@@ -177,13 +177,13 @@ hamMessagesCount = len(hamSentenceArr)
 spamMessagesCount = len(spamSentenceArr)
 wordsMessages = hamMessagesCount + spamMessagesCount
 
-pHam = log(hamMessagesCount / wordsMessages)
-pSpam = log(spamMessagesCount / wordsMessages)
+pHam = hamMessagesCount / wordsMessages
+pSpam = spamMessagesCount / wordsMessages
 
 USER_INP = simpledialog.askstring(title="Input", prompt="Enter message:")
 
-pWordHam = log(pMessage(USER_INP, 'ham'))
-pWordSpam = log(pMessage(USER_INP, 'spam'))
+pWordHam = pMessage(USER_INP, 'ham')
+pWordSpam = pMessage(USER_INP, 'spam')
 hamRes = log(pHam * pWordHam)
 spamRes = log(pSpam * pWordSpam)
 
@@ -192,7 +192,7 @@ print("P(spam) =", pSpam)
 print("P(bodyText | ham) =", pWordHam)
 print("P(bodyText | spam) =", pWordSpam)
 print("Ham result = ", hamRes)
-print("Ham result = ", spamRes)
+print("Spam result = ", spamRes)
 
 if hamRes > spamRes:
     print("Message from ham category")
