@@ -6,6 +6,7 @@ import pandas as pd
 import re
 import tkinter as tk
 from tkinter import filedialog, simpledialog
+from math import log
 
 root = tk.Tk()
 root.withdraw()
@@ -100,7 +101,8 @@ def multiplyList(myList):
 
 
 def pMessage(message, category):
-    words = message.split(sep=' ')
+    text = re.sub("[^a-zA-Z ]+", "", message).lower()
+    words = text.split(sep=' ')
     wordsCounter = counterHam
     if (category == 'spam'):
         wordsCounter = counterSpam
@@ -108,6 +110,10 @@ def pMessage(message, category):
     noWordsCounter = 0
 
     for i in words:
+        text = wordFromStopListCheck(text)
+        if(text == " "):
+            continue
+
         word = wordsCounter.get(i)
         if word is None:
             noWordsCounter += 1
@@ -171,15 +177,15 @@ hamMessagesCount = len(hamSentenceArr)
 spamMessagesCount = len(spamSentenceArr)
 wordsMessages = hamMessagesCount + spamMessagesCount
 
-pHam = hamMessagesCount / wordsMessages
-pSpam = spamMessagesCount / wordsMessages
+pHam = log(hamMessagesCount / wordsMessages)
+pSpam = log(spamMessagesCount / wordsMessages)
 
 USER_INP = simpledialog.askstring(title="Input", prompt="Enter message:")
 
-pWordHam = pMessage(USER_INP, 'ham')
-pWordSpam = pMessage(USER_INP, 'spam')
-hamRes = pHam * pWordHam
-spamRes = pSpam * pWordSpam
+pWordHam = log(pMessage(USER_INP, 'ham'))
+pWordSpam = log(pMessage(USER_INP, 'spam'))
+hamRes = log(pHam * pWordHam)
+spamRes = log(pSpam * pWordSpam)
 
 print("P(ham) =", pHam)
 print("P(spam) =", pSpam)
