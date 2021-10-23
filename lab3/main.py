@@ -3,11 +3,8 @@ import matplotlib
 import pandas as pd
 from tkinter import filedialog, simpledialog, Tk
 import matplotlib.pyplot as plt
-import threading
 from datetime import datetime
 
-threadLock = threading.Lock()
-threads = []
 matplotlib.rc('figure', figsize=(10, 5))
 Tk().withdraw()
 FILE_PATH = filedialog.askopenfilename()
@@ -17,22 +14,6 @@ x = fileValues.iloc[:, [0, 1]].values
 N = len(x)
 y = np.zeros(N)
 sse = []
-
-class myThread (threading.Thread):
-   def __init__(self, threadID, name, counter, i, x, y ,N):
-      threading.Thread.__init__(self)
-      self.threadID = threadID
-      self.name = name
-      self.counter = counter
-      self.i = i
-      self.x = x
-      self.y = np.copy(y)
-      self.N = N
-   def run(self):
-      print("Starting " + self.name)
-      avg, y ,x = k_avg(self.i, self.x, self.y, self.N)
-      sse.append(avg)
-      print("Exiting  " + self.name)
 
 def k_avg(num_cluster, x, y, N):
     flag = True
@@ -71,12 +52,9 @@ for k in range(num_cluster):
 plt.show()
 
 for i in range(1, num_cluster):
-    thread = myThread(i, "Thread-" + str(i), i, i, x, y, N)
-    thread.start()
-    threads.append(thread)
-
-for t in threads:
-    t.join()
+    y = np.copy(y)
+    avg, y, x = k_avg(i, x, y, N)
+    sse.append(avg)
 
 sse.sort(reverse=True)
 print(list(range(1, num_cluster + 1)), sse)
