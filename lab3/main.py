@@ -3,7 +3,6 @@ import matplotlib
 import pandas as pd
 from tkinter import filedialog, simpledialog, Tk
 import matplotlib.pyplot as plt
-from datetime import datetime
 
 matplotlib.rc('figure', figsize=(10, 5))
 Tk().withdraw()
@@ -45,7 +44,6 @@ def k_avg(num_cluster, x, y, N):
 
 
 avg, y, x = k_avg(num_cluster, x, y, N)
-now = datetime.now()
 sse.append(avg)
 for k in range(num_cluster):
     fig = plt.scatter(x[y == k, 0], x[y == k, 1])
