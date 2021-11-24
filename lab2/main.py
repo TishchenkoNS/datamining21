@@ -11,7 +11,7 @@ from math import log
 root = tk.Tk()
 root.withdraw()
 
-matplotlib.rc('figure', figsize=(10, 5))
+matplotlib.rc('figure', figsize=(125, 25))
 porter = PorterStemmer()
 path = "output/"
 FILE_PATH = filedialog.askopenfilename()
@@ -187,17 +187,13 @@ pWordSpam = pMessage(USER_INP, 'spam')
 hamRes = log(pHam * pWordHam)
 spamRes = log(pSpam * pWordSpam)
 
-print("P(ham) =", pHam)
-print("P(spam) =", pSpam)
-print("P(bodyText | ham) =", pWordHam)
-print("P(bodyText | spam) =", pWordSpam)
 print("Ham result = ", hamRes)
 print("Spam result = ", spamRes)
 
 if hamRes > spamRes:
-    print("Message from ham category")
+    print("This message is from ham category")
 else:
-    print("Message from spam category")
+    print("This message is from spam category")
 
 write(counterHam, 'counterHam')
 write(counterSpam, 'counterSpam')

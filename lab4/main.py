@@ -54,7 +54,7 @@ def html_recursive_parser(url):
 
     for lnk in soup.find_all('a', href=True):
         full_link = user_input[:-1] + lnk['href']
-        if "http" not in lnk['href'] and full_link != url:
+        if "http" not in lnk['href']:
             links_list.append(full_link)
 
     for lnk in links_list:
@@ -79,7 +79,7 @@ top_ten_pages = []
 for i in range(len(pages_ranks)):
     top_ten_pages.append([pages_list[i], pages_ranks[i]])
 
-top_ten_pages = sorted(top_ten_pages, key=lambda x: x[1], reverse=True)[:10]
+top_ten_pages = sorted(top_ten_pages, reverse=True, key=lambda x: x[1])[:10]
 
 for page, rank in top_ten_pages:
     print(f'Page: {page}; Rank: {rank}')

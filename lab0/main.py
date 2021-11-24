@@ -1,17 +1,20 @@
 import os
-
 import matplotlib
 from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize
 from collections import Counter
 import pandas as pd
 import re
+import tkinter as tk
+from tkinter import filedialog
 from matplotlib import pyplot as plt
 
+root = tk.Tk()
+root.withdraw()
 matplotlib.rc('figure', figsize=(10, 5))
 porter = PorterStemmer()
 path = "output/"
-FILE_PATH = "sms-spam-corpus.csv"
+FILE_PATH = filedialog.askopenfilename()
 STOP_LIST = ["a", "the", "to", "in"]
 spam = pd.read_csv(FILE_PATH, encoding='cp1251')
 figuresCount = 0
@@ -155,9 +158,46 @@ namesSpam, valuesSpam = zip(*counterSpamFirstTwenty)
 hamValues = normalize(list(valuesHam))
 spamValues = normalize(list(valuesSpam))
 
+def sentNormalize(list):
+    listSize = len(list)
+    for i, val in enumerate(list):
+        list[i] = i / listSize
+    return list
+
+def deepcopy_list(x):
+  if isinstance(x, (str, bool, float, int)):
+    return x
+  else:
+    return [deepcopy_list(y) for y in x]
+
+
 barBuild([namesHam, hamValues], [namesSpam, spamValues], title="20 most common words", type='bar')
 barBuild(hamWordsLengthArr, spamWordsLengthArr, wordsAvgLength, title="Words length")
-barBuild(hamSentenceLengthArr, spamSentenceLengthArr, sentenceAvgLength, title="Sentence length")
+
+
+title = "Sentence length"
+figuresCount += 1
+plt.figure(figuresCount)
+plt.suptitle(title)
+ax1 = plt.subplot(1, 2, 1)
+ax1.title.set_text("ham info")
+hamSentenceLengthArr.sort(reverse=True)
+h = deepcopy_list(hamSentenceLengthArr)
+normalize2 = sentNormalize(hamSentenceLengthArr)
+plt.plot(normalize2, h)
+plt.axhline(sentenceAvgLength, color='r')
+plt.legend(['ham', 'agv size'])
+
+ax2 = plt.subplot(1, 2, 2)
+ax2.title.set_text("spam info")
+spamSentenceLengthArr.sort(reverse=True)
+h1 = deepcopy_list(spamSentenceLengthArr)
+normalize2 = sentNormalize(spamSentenceLengthArr)
+print(normalize2)
+plt.plot(normalize2, h1)
+plt.axhline(sentenceAvgLength, color='r')
+plt.legend(['spam', 'agv size'])
+plt.savefig(path + title + '.png')
 
 plt.show()
 
